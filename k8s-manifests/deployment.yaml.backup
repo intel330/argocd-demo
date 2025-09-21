@@ -6,7 +6,7 @@ metadata:
   labels:
     app: demo-app
 spec:
-  replicas: 3
+  replicas: 2
   selector:
     matchLabels:
       app: demo-app
@@ -26,13 +26,6 @@ spec:
             configMapKeyRef:
               name: app-config
               key: app_name
-        - name: API_KEY
-          valueFrom:
-            secretKeyRef:
-              name: app-secret
-              key: api_key
-        command: ["/bin/sh"]
-        args: ["-c", "echo 'App Name:' $APP_NAME && echo 'API Key:' $API_KEY && nginx -g 'daemon off;'"]
 ---
 apiVersion: v1
 kind: Service
