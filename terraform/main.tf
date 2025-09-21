@@ -31,3 +31,16 @@ resource "kubernetes_config_map" "app_config" {
     app_name     = "Demo Application"
   }
 }
+
+resource "kubernetes_secret" "app_secret" {
+  metadata {
+    name      = "app-secret"
+    namespace = kubernetes_namespace.demo.metadata[0].name
+  }
+
+  data = {
+    api_key = "c2VjcmV0LWtleQ=="  # base64 encoded "secret-key"
+  }
+
+  type = "Opaque"
+}

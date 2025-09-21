@@ -3,11 +3,13 @@ kind: Application
 metadata:
   name: demo-app
   namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
 spec:
   project: default
   source:
-    repoURL: https://github.com/YOUR_USERNAME/argocd-demo.git
-    targetRevision: main
+    repoURL: https://github.com/intel330/argocd-demo.git
+    targetRevision: HEAD
     path: k8s-manifests
   destination:
     server: https://kubernetes.default.svc
@@ -16,5 +18,14 @@ spec:
     automated:
       prune: true
       selfHeal: true
+      allowEmpty: false
     syncOptions:
     - CreateNamespace=true
+    - PrunePropagationPolicy=foreground
+    - PruneLast=true
+    retry:
+      limit: 5
+      backoff:
+        duration: 5s
+        factor: 2
+        maxDuration: 3m
